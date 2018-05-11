@@ -1,5 +1,7 @@
 import {Request, Response, NextFunction, Router} from 'express';
 import Model from './thing.model';
+import Auth from "../auth";
+
 
 export default class ThingController {
 
@@ -10,7 +12,7 @@ export default class ThingController {
         console.log("initialized ThingController");
         this.router = Router();
         this.router.get('/', ThingController.getAll);
-        this.router.post('/', ThingController.create);
+        this.router.post('/', Auth.isAuthenticated, ThingController.create);
 
         return this.router;
     }

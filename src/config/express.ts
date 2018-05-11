@@ -2,12 +2,16 @@ import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
+import * as expressValidator from "express-validator";
 import * as logger from "morgan";
 import * as path from "path";
 import * as mongoose from "mongoose";
 import Routes from "./routes";
 
 import * as cors from "cors";
+
+import Auth from "../api/auth";
+
 
 class Express {
 
@@ -122,10 +126,15 @@ class Express {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
 
+        this.app.use(expressValidator());
+
         // 
         // Add cookie parser
         this.app.use(cookieParser());
 
+        // Add auth
+
+        this.app.use(Auth.initialize());
     }
 
     /**
