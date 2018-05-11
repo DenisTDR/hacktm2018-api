@@ -35,7 +35,7 @@ class Express {
         this.enableCors();
         // 
         // Set view engine
-        this.setViewEngine();
+        // this.setViewEngine();
 
         // 
         // Middleware

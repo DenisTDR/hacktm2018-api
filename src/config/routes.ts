@@ -1,5 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import ExampleRouter from '../api/example/example.router';
+import ThingController from '../api/thing/thing.controller';
+
 
 export default class Routes {
 
@@ -41,6 +43,8 @@ export default class Routes {
         // 
         // Your routes goes here
         this.app.use('/api/examples', ExampleRouter);
+        this.app.use('/api/things', new ThingController().initAndGetRouter());
+
 
 
         /*--------  Main routes  --------*/
