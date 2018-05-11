@@ -7,6 +7,8 @@ import * as path from "path";
 import * as mongoose from "mongoose";
 import Routes from "./routes";
 
+import * as cors from "cors";
+
 class Express {
 
     public app: express.Express;
@@ -30,9 +32,10 @@ class Express {
         // Start App
         this.app = express();
 
+        this.enableCors();
         // 
         // Set view engine
-        this.setViewEngine();
+        // this.setViewEngine();
 
         // 
         // Middleware
@@ -143,6 +146,21 @@ class Express {
         // 
         // Create Routes, and export its configured Express.Router
         new Routes(this.app);
+    }
+
+    private enableCors() {
+        const corsOptions = {
+            origin: [
+                'http://localhost:4200',
+                'http://localhost:4000',
+                'https://opiria.io',
+                'https://panel.opiria.io',
+            ],
+            credentials: true,
+            optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+        };
+
+        this.app.use(cors(corsOptions));
     }
 }
 

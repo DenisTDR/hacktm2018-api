@@ -26,7 +26,7 @@ express-typescript-mongoose-starter
     │    ├── api
     │    │    ├── example     <= Replace example for feature name
     │    │    │    ├── example.controller.ts
-    │    │    │    ├── example.model.ts
+    │    │    │    ├── thing.model.ts
     │    │    │    ├── example.router.ts
     │    ├── config
     │    │    ├── express.ts
