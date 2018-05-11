@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import {Router, Request, Response, NextFunction} from 'express';
 import ExampleController from './example.controller';
 
 export class ExampleRouter {
@@ -35,5 +35,6 @@ export class ExampleRouter {
 // Create Router and export its configured Express.Router
 const exampleRoutes = new ExampleRouter();
 exampleRoutes.init();
+const router = exampleRoutes.router;
 
-export default exampleRoutes.router;
+export default router;

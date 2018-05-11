@@ -59,8 +59,9 @@ class Express {
 
         // 
         // Add NODE_ENV to path if is not production
-        if (process.env.NODE_ENV !== 'production') this.envFile += '.' + process.env.NODE_ENV;
+        if (process.env.NODE_ENV !== 'production' && typeof process.env.NODE_ENV !== 'undefined') this.envFile += '.' + process.env.NODE_ENV;
 
+        console.log(`using envFile: ${this.envFile}`);
         // 
         // Set env from file
         dotenv.config({ path: this.envFile });
@@ -71,12 +72,26 @@ class Express {
      */
     private connectToMongo() {
 
-        // 
+        const options = {};
+
         // Connect to mongo using mongoose
-        // @todo: fix "open()" DeprecationWarning warning
-        mongoose.connect(process.env.MONGO_URI, {
-            db: { safe: true }
-        });
+
+        const mongoUri = process.env.MONGO_URI;
+
+        if(typeof mongoUri === 'undefined' || !mongoUri) {
+            console.error("invalid MONGO_URI");
+            process.exit(-1);
+        }
+
+        mongoose.connect(process.env.MONGO_URI, options, (err => {
+            if (err) {
+                console.error("can't connect to mongo");
+                console.error(err);
+                process.exit(-1);
+                return;
+            }
+            console.log("connected to MongoDB");
+        }));
     }
 
     /**
