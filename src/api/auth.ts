@@ -50,7 +50,7 @@ class Auth {
             let errors = req.validationErrors();
             if (errors) throw errors;
 
-            let user = await User.findOne({ "username": req.body.username }).exec();
+            let user = await User.findOne({ "username": req.body.username.trim() }).exec();
 
             if (user === null) throw "User not found";
 
@@ -66,21 +66,31 @@ class Auth {
     public register = async (req, res) => {
         try {
             req.checkBody("username", "Invalid username").notEmpty();
+            req.checkBody("email", "Invalid email").notEmpty().isEmail();
             req.checkBody("password", "Invalid password").notEmpty();
+            req.checkBody("firstName", "Invalid first name").notEmpty();
+            req.checkBody("lastName", "Invalid last name").notEmpty();
+            req.checkBody("birthdate", "Invalid birthdate").notEmpty();
+            req.checkBody("city", "Invalid city").notEmpty();
+            req.checkBody("country", "Invalid country").notEmpty();
 
             let errors = req.validationErrors();
 
             if (errors) throw errors;
 
-            let user = await User.findOne({ "username": req.body.username }).exec();
+            let user = await User.findOne({ "username": req.body.username.trim() }).exec();
 
             if (user !== null) throw "Username is taken";
+
+            user = await User.findOne({ "email": req.body.email.trim() }).exec();
+
+            if (user !== null) throw "Email is taken";
 
             user = new User(req.body);
 
             await user.save();
 
-            res.status(200);
+            res.status(200).json({"message": "User registered"});
         } catch (err) {
             res.status(401).json({ "message": "Invalid credentials", "errors": err });
         }
