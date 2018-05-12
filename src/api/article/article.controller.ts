@@ -1,6 +1,7 @@
 import {Request, Response, NextFunction, Router} from 'express';
 import Article from '../../models/article.model';
 import Publication from '../../models/publication.model';
+import ArticleCrawler from '../../services/article-crawler.service';
 
 export default class ArticleController {
 
@@ -70,18 +71,9 @@ export default class ArticleController {
 
             // call scraper
 
-            // Create model
-            let model = new Article({
-                title: req.body.title,
-                articleBody: req.body.articleBody,
-                articleLead: req.body.articleLead,
-                thumbnail: req.body.thumbnail,
-                url: req.body.url.toLowerCase(),
-                date: req.body.date,
-                publication: req.body.publicationId
-            });
+            const ac = new ArticleCrawler(req.body.url.trim());
+            let model = await ac.crawl();
 
-            //
             // Save
             await model.save();
 
