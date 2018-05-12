@@ -9,7 +9,7 @@ export default class ThingController {
 
 
     public initAndGetRouter(): Router {
-        console.log("initialized ArticleController");
+        console.log("initialized PublicationController");
         this.router = Router();
         this.router.get('/', ThingController.getAll);
         this.router.post('/', Auth.isAuthenticated, ThingController.create);

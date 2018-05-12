@@ -8,7 +8,6 @@ export default class ArticleController {
 
 
     public initAndGetRouter(): Router {
-        console.log("initialized ArticleController");
         this.router = Router();
         this.router.get('/', ArticleController.get);
         this.router.post('/', ArticleController.create);
