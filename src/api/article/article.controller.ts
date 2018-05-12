@@ -1,6 +1,7 @@
 import {Request, Response, NextFunction, Router} from 'express';
 import Article from '../../models/article.model';
 import Publication from '../../models/publication.model';
+import EthApiService from "../../services/eth-api.service";
 
 export default class ArticleController {
 
@@ -11,6 +12,7 @@ export default class ArticleController {
         this.router = Router();
         this.router.get('/', ArticleController.get);
         this.router.post('/', ArticleController.create);
+        this.router.post('/:_id/vote/:value', ArticleController.vote);
 
         return this.router;
     }
@@ -91,6 +93,36 @@ export default class ArticleController {
             });
         } catch (err) {
             res.status(400).json({ "message": "Invalid data", "errors": err });
+        }
+    }
+
+    public static async vote(req: Request, res: Response, next: NextFunction) {
+
+        try {
+            //
+            // Get data
+
+            let article = await Article.findById(req.params._id).exec();
+
+            if (article === null) throw "Article not found";
+
+            if (req.params.value !== 'true' && req.params.value !== 'false') throw "Invalid value, must be true or false";
+
+            //await EthApiService.vote(Boolean(req.params.value), article._id, res.locals.user._id);
+
+            //
+            // Response
+            res.send({
+                message: 'it works!'
+            });
+        } catch (err) {
+
+            //
+            // Error response
+            res.send({
+                message: 'Could not vote',
+                err: err
+            });
         }
     }
 }

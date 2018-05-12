@@ -24,4 +24,19 @@ export default class EthApiService {
         //     json: true
         // });
     }
+
+    public static async vote(value: Boolean, articleId: String, userId: String) {
+        return true;
+
+        // return requestPromise({
+        //     method: 'POST',
+        //     body: {
+        //         value: value,
+        //         article: articleId,
+        //         user: userId
+        //     },
+        //     uri: process.env.ETH_API_BASE + '/eth/vote',
+        //     json: true
+        // });
+    }
 }
