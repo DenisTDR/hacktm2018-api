@@ -14,13 +14,14 @@ export default class EthApiService {
     }
 
     public static async createArticle(articleHash: String) {
-        return requestPromise({
-            method: 'POST',
-            body: {
-                hash: articleHash
-            },
-            uri: process.env.ETH_API_BASE + '/article/new',
-            json: true
-        });
+        return true;
+        // return requestPromise({
+        //     method: 'POST',
+        //     body: {
+        //         hash: articleHash
+        //     },
+        //     uri: process.env.ETH_API_BASE + '/article/new',
+        //     json: true
+        // });
     }
 }

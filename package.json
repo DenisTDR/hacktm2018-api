@@ -10,9 +10,7 @@
         "watch-ts": "tsc-watch -w -p src --onSuccess \"npm run start-dev\"",
         "start": "node dist/server.js",
         "start-dev": "nodemon dist/server.js",
-        "start-dev-2": "ts-node-dev --respawn --type-check src\\server.ts",
-        "start-pm2": "npm run build-ts & pm2 start dist/server.js --name hacktm",
-        "restart-pm2": "npm run build-ts & pm2 restart hacktm"
+        "start-dev-2": "ts-node-dev --respawn --type-check src\\server.ts"
     },
     "keywords": [
         "Node",

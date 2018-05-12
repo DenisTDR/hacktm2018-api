@@ -67,7 +67,7 @@ export default class ArticleController {
             let article = await Article.findOne({"url": req.body.url.trim()}).exec();
 
             if (article !== null) throw "Article with that url already exists";
-            
+
             // call scraper
 
             // Create model
