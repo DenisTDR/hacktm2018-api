@@ -23,7 +23,7 @@ export default class EthApiService {
             uri: process.env.ETH_API_BASE + '/article/new',
             json: true,
             resolveWithFullResponse: true
-        });
+        }).then((response) => response.body);
     }
 
     public static async vote(value: Boolean, articleId: String, userId: String) {
