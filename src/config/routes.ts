@@ -4,6 +4,7 @@ import ThingController from '../api/thing/thing.controller';
 import Auth from "../api/auth";
 import ArticleController from "../api/article/article.controller";
 import PublicationController from "../api/publication/publication.controller";
+import UserController from "../api/user/user.controller";
 
 export default class Routes {
 
@@ -48,6 +49,7 @@ export default class Routes {
         this.app.use('/api/things', new ThingController().initAndGetRouter());
         this.app.use('/api/articles', new ArticleController().initAndGetRouter());
         this.app.use('/api/publications', new PublicationController().initAndGetRouter());
+        this.app.use('/api/users', new UserController().initAndGetRouter());
 
         this.app.post('/api/auth/login', Auth.login);
         this.app.post('/api/auth/register', Auth.register);
