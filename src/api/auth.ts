@@ -42,6 +42,15 @@ class Auth {
         })(req, res, next);
     };
 
+    public setAuthenticatedUser = async (req, res, next) => {
+        return this.authenticate((err, user) => {
+            if (user) {
+                res.locals.user = user;
+            }
+            return next();
+        })(req, res, next);
+    };
+
     public login = async (req, res) => {
         try {
             req.checkBody("username", "Invalid username").notEmpty();

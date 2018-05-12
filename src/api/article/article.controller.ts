@@ -3,6 +3,8 @@ import Publication from '../../models/publication.model';
 import EthApiService from "../../services/eth-api.service";
 import ArticleCrawler from '../../services/article-crawler.service';
 import Article from '../../models/article.model';
+import User, {IUser} from '../../models/user.model';
+import Auth from "../auth";
 
 export default class ArticleController {
 
@@ -11,9 +13,9 @@ export default class ArticleController {
 
     public initAndGetRouter(): Router {
         this.router = Router();
-        this.router.get('/', ArticleController.get);
+        this.router.get('/', Auth.setAuthenticatedUser, ArticleController.get);
         this.router.post('/', ArticleController.create);
-        this.router.post('/:_id/vote/:value', ArticleController.vote);
+        this.router.post('/:_id/vote/:value', Auth.isAuthenticated, ArticleController.vote);
 
         return this.router;
     }
@@ -35,6 +37,29 @@ export default class ArticleController {
                 model: Publication
             }).exec();
 
+            articles = articles.map((element) => element.toObject());
+
+            console.log(req.query._id !== undefined);
+            console.log(res.locals.user !== undefined);
+
+            // If user is authenticated & request is for single article (searching by id)
+            // Set didVote info on response
+            if (req.query._id !== undefined && res.locals.user !== undefined) {
+                let article: any = articles[0];
+
+                let user : any = await User.findById(res.locals.user._id).exec();
+
+                let voteOf = await EthApiService.voteOf(article.ethAddress, user.ethAddress);
+
+                console.log("voteof: ", voteOf);
+
+                voteOf.status = undefined;
+
+                articles[0] = Object.assign(articles[0], voteOf);
+
+                console.log(articles[0]);
+            }
+
             let promises = articles.map((element: any) => {
                 return EthApiService.getArticleValues(element.ethAddress);
             });
@@ -45,7 +70,7 @@ export default class ArticleController {
 
                     results.forEach((element, index) => {
                         element.status = undefined;
-                        newResults.push(Object.assign(articles[index].toObject(), element));
+                        newResults.push(Object.assign(articles[index], element));
                     });
 
                     res.send({
@@ -106,13 +131,22 @@ export default class ArticleController {
             //
             // Get data
 
-            let article = await Article.findById(req.params._id).exec();
+            let article : any = await Article.findById(req.params._id).exec();
 
             if (article === null) throw "Article not found";
 
             if (req.params.value !== 'true' && req.params.value !== 'false') throw "Invalid value, must be true or false";
 
-            //await EthApiService.vote(Boolean(req.params.value), article._id, res.locals.user._id);
+            let user : any = await User.findById(res.locals.user._id).exec();
+
+            // user = user.toObject();
+
+            await EthApiService.vote(
+                Boolean(req.params.value),
+                article.ethAddress,
+                user.ethAddress,
+                user.profileAddress,
+                user.password);
 
             //
             // Response
@@ -123,7 +157,7 @@ export default class ArticleController {
 
             //
             // Error response
-            res.send({
+            res.status(400).send({
                 message: 'Could not vote',
                 err: err
             });

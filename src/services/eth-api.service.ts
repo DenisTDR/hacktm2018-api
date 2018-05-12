@@ -29,19 +29,33 @@ export default class EthApiService {
         }).then((response) => response.body);
     }
 
-    public static async vote(value: Boolean, articleId: String, userId: String) {
-        return true;
+    public static async vote(value: Boolean,
+                             articleAddress: String,
+                             userEthAddress: String,
+                             userProfileAddress: String,
+                             userPassword: String) {
+        console.log("vote eth api");
 
-        // return requestPromise({
-        //     method: 'POST',
-        //     body: {
-        //         value: value,
-        //         article: articleId,
-        //         user: userId
-        //     },
-        //     uri: process.env.ETH_API_BASE + '/eth/vote',
-        //     json: true
-        // });
+
+        return requestPromise({
+            method: 'POST',
+            body: {
+                articleAddress: articleAddress,
+                vote: value,
+                weight: 1.5,
+                userProfileAddress: userProfileAddress,
+                voterAddress: userEthAddress,
+                password: userPassword
+            },
+            uri: process.env.ETH_API_BASE + '/article/vote',
+            json: true
+        }).catch((err) => {
+            if (err.error.reason === "You already voted for this article") {
+                err = { message: "You already voted for this article" }
+            }
+
+            throw err;
+        });
     }
 
     public static async getArticleValues(articleAddress: String) {
@@ -56,9 +70,21 @@ export default class EthApiService {
             uri: process.env.ETH_API_BASE + '/article/state',
             json: true,
             resolveWithFullResponse: true
-        }).then((response) => {
-            console.log("res body> ", response.body);
-            return response.body;
-        })
+        }).then((response) => response.body);
+    }
+
+    public static async voteOf(articleAddress: String, userAddress: String) {
+        console.log("get did vote eth api", articleAddress);
+
+        return requestPromise({
+            method: 'GET',
+            qs: {
+                articleAddress: articleAddress,
+                voterAddress: userAddress
+            },
+            uri: process.env.ETH_API_BASE + '/article/voteOf',
+            json: true,
+            resolveWithFullResponse: true
+        }).then((response) => response.body);
     }
 }
