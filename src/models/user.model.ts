@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import * as bcrypt from "bcryptjs";
+import EthApiService from "./../services/eth-api.service";
 
 export interface IUser extends mongoose.Document {
     username: string;
@@ -55,6 +56,9 @@ export const schema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    eth_address: {
+        type: String
     }
 
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
@@ -64,6 +68,18 @@ schema.pre("save", function (next) {
         this.password = hash;
         next();
     });
+});
+
+schema.pre("save", async function (next) {
+    try {
+        let account = await EthApiService.createAcccount(this.password);
+
+        this.eth_address = account.address;
+        next();
+    } catch (err) {
+        next(err);
+    }
+
 });
 
 schema.pre("update", function (next) {
