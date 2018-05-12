@@ -58,11 +58,7 @@ export default class ArticleController {
     public static async create(req: Request, res: Response, next: NextFunction) {
 
         try {
-            req.checkBody("title", "Invalid title").notEmpty();
-            req.checkBody("content", "Invalid content").notEmpty();
             req.checkBody("url", "Invalid url").notEmpty();
-            req.checkBody("date", "Invalid date").notEmpty();
-            req.checkBody("publicationId", "Invalid publicationId").notEmpty();
 
             let errors = req.validationErrors();
 
@@ -71,16 +67,15 @@ export default class ArticleController {
             let article = await Article.findOne({"url": req.body.url.trim()}).exec();
 
             if (article !== null) throw "Article with that url already exists";
+            
+            // call scraper
 
-            let publication = await Publication.findById(req.body.publicationId).exec();
-
-            if (publication === null) throw "Inexistent publication";
-
-            //
             // Create model
             let model = new Article({
                 title: req.body.title,
-                content: req.body.content,
+                articleBody: req.body.articleBody,
+                articleLead: req.body.articleLead,
+                thumbnail: req.body.thumbnail,
                 url: req.body.url.toLowerCase(),
                 date: req.body.date,
                 publication: req.body.publicationId
