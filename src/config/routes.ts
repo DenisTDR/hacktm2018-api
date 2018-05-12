@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import ExampleRouter from '../api/example/example.router';
 import ThingController from '../api/thing/thing.controller';
 import Auth from "../api/auth";
+import ArticleController from "../api/article/article.controller";
 
 export default class Routes {
 
@@ -44,6 +45,7 @@ export default class Routes {
         // Your routes goes here
         this.app.use('/api/examples', ExampleRouter);
         this.app.use('/api/things', new ThingController().initAndGetRouter());
+        this.app.use('/api/articles', new ArticleController().initAndGetRouter());
         this.app.post('/api/auth/login', Auth.login);
         this.app.post('/api/auth/register', Auth.register);
 
