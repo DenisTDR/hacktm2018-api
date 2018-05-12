@@ -1,7 +1,6 @@
 import {Request, Response, NextFunction, Router} from 'express';
 import Article from '../../models/article.model';
 import Publication from '../../models/publication.model';
-import base64url from "base64url";
 
 export default class ArticleController {
 
@@ -19,31 +18,20 @@ export default class ArticleController {
 
     /**
      * Get all
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
+     * @param {*} req
+     * @param {*} res
+     * @param {*} next
      */
     public static async get(req: Request, res: Response, next: NextFunction) {
 
         try {
-            let result;
             // 
             // Get data
-            if (req.query.url !== null) {
-                let url = base64url.decode(req.query.url);
-                result = await Article.findOne({
-                    "url": url.trim().toLowerCase()
-                }).populate({
-                    path: 'publication',
-                    model: Publication
-                }).exec();
 
-            } else {
-                result = await Article.find().populate({
-                    path: 'publication',
-                    model: Publication
-                }).exec();
-            }
+            let result = await Article.find(req.query).populate({
+                path: 'publication',
+                model: Publication
+            }).exec();
 
             // 
             // Response
@@ -64,9 +52,9 @@ export default class ArticleController {
 
     /**
      * Create
-     * @param {*} req 
-     * @param {*} res 
-     * @param {*} next 
+     * @param {*} req
+     * @param {*} res
+     * @param {*} next
      */
     public static async create(req: Request, res: Response, next: NextFunction) {
 
