@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction, Router} from 'express';
-import Article from '../../models/article.model';
 import Publication from '../../models/publication.model';
 import EthApiService from "../../services/eth-api.service";
 import ArticleCrawler from '../../services/article-crawler.service';
+import Article from '../../models/article.model';
 
 export default class ArticleController {
 
@@ -30,17 +30,29 @@ export default class ArticleController {
             // 
             // Get data
 
-            let result = await Article.find(req.query).populate({
+            let articles = await Article.find(req.query).populate({
                 path: 'publication',
                 model: Publication
             }).exec();
 
-            // 
-            // Response
-            res.send({
-                message: 'it works!',
-                result: result
+            let promises = articles.map((element: any) => {
+                return EthApiService.getArticleValues(element.ethAddress);
             });
+
+            Promise.all(promises)
+                .then(results => {
+                    let newResults = [];
+
+                    results.forEach((element, index) => {
+                        element.status = undefined;
+                        newResults.push(Object.assign(articles[index].toObject(), element));
+                    });
+
+                    res.send({
+                        message: 'it works!',
+                        result: newResults
+                    });
+                })
         } catch (err) {
 
             // 
