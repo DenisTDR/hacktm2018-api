@@ -30,7 +30,7 @@ export const schema = new mongoose.Schema({
     },
     validated: {
         type: Boolean,
-        default: false,
+        default: true,
         required: true
     },
     firstName: {
