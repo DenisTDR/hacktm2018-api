@@ -4,6 +4,7 @@ import * as bcrypt from "bcryptjs";
 export interface IUser extends mongoose.Document {
     username: string;
     password: string;
+    validated: boolean;
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 

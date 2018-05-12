@@ -57,6 +57,8 @@ class Auth {
             let success = await user.comparePassword(req.body.password);
             if (success === false) throw "";
 
+            if (!user.validated) throw "User was not validated";
+
             res.status(200).json(this.genToken(user));
         } catch (err) {
             res.status(401).json({ "message": "Invalid credentials", "errors": err });
