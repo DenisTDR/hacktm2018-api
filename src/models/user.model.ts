@@ -78,7 +78,8 @@ schema.pre("save", async function (next) {
     try {
         let account = await EthApiService.createAcccount(this.password);
 
-        this.ethAddress = account.address;
+        this.ethAddress = "randomvalue";
+        // this.ethAddress = account.address;
         next();
     } catch (err) {
         next(err);
