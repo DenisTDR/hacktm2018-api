@@ -15,15 +15,15 @@ export default class EthApiService {
     }
 
     public static async createArticle(articleHash: String) {
-        return true;
-        // return requestPromise({
-        //     method: 'POST',
-        //     body: {
-        //         hash: articleHash
-        //     },
-        //     uri: process.env.ETH_API_BASE + '/article/new',
-        //     json: true
-        // });
+        return requestPromise({
+            method: 'POST',
+            body: {
+                hash: articleHash
+            },
+            uri: process.env.ETH_API_BASE + '/article/new',
+            json: true,
+            resolveWithFullResponse: true
+        });
     }
 
     public static async vote(value: Boolean, articleId: String, userId: String) {

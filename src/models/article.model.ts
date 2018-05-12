@@ -36,13 +36,18 @@ let schema: Schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Publication',
         required: true
+    },
+    ethAddress: {
+        type: String
     }
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
 
 schema.pre("save", function (next) {
     bcrypt.hash(this.title + this.articleBody + this.articleLead, 10, async (err, hash) => {
         try {
-            await EthApiService.createArticle(hash);
+            let response = await EthApiService.createArticle(hash);
+            
+            this.ethAddress = response.model.ethAddress;
 
             next();
         } catch (err) {
