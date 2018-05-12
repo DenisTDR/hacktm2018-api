@@ -9,15 +9,23 @@ let schema: Schema = new Schema({
         required: true,
         trim: true
     },
-    content: {
+    articleBody: {
         type: String,
         required: true,
+        trim: true
+    },
+    articleLead: {
+        type: String,
         trim: true
     },
     url: {
         type: String,
         required: true,
         unique: true,
+        trim: true
+    },
+    thumbnail: {
+        type: String,
         trim: true
     },
     date: {
@@ -32,7 +40,7 @@ let schema: Schema = new Schema({
 }, { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } });
 
 schema.pre("save", function (next) {
-    bcrypt.hash(this.title + this.content, 10, async (err, hash) => {
+    bcrypt.hash(this.title + this.articleBody + this.articleLead, 10, async (err, hash) => {
         try {
             await EthApiService.createArticle(hash);
 
