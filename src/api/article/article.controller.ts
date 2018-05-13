@@ -47,7 +47,7 @@ export default class ArticleController {
             if (req.query._id !== undefined && res.locals.user !== undefined) {
                 let article: any = articles[0];
 
-                let user : any = await User.findById(res.locals.user._id).exec();
+                let user: any = await User.findById(res.locals.user._id).exec();
 
                 let voteOf = await EthApiService.voteOf(article.ethAddress, user.ethAddress);
 
@@ -121,7 +121,7 @@ export default class ArticleController {
                 model: model
             });
         } catch (err) {
-            res.status(400).json({ "message": "Invalid data", "errors": err });
+            res.status(400).json({"message": "Invalid data", "errors": err});
         }
     }
 
@@ -131,18 +131,18 @@ export default class ArticleController {
             //
             // Get data
 
-            let article : any = await Article.findById(req.params._id).exec();
+            let article: any = await Article.findById(req.params._id).exec();
 
             if (article === null) throw "Article not found";
 
             if (req.params.value !== 'true' && req.params.value !== 'false') throw "Invalid value, must be true or false";
 
-            let user : any = await User.findById(res.locals.user._id).exec();
+            let user: any = await User.findById(res.locals.user._id).exec();
 
             // user = user.toObject();
 
             await EthApiService.vote(
-                Boolean(req.params.value),
+                req.params.value === 'true',
                 article.ethAddress,
                 user.ethAddress,
                 user.profileAddress,
