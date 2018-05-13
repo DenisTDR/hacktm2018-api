@@ -79,10 +79,10 @@ export default class ArticleCrawler {
         const title = $('title').first().text();
         const articleBody = $('.b-article__text p').text();
         const articleLead = $('.b-article__text p').text();
-        let thumbnail = $('.b-inject__media img').attr('src');
+        let thumbnail = $('.b-article__header img').attr('src');
 
         if (typeof thumbnail === 'undefined') {
-            thumbnail = $('.b-article__header img').attr('src');
+            thumbnail = $('.b-inject__media img').attr('src');
         }
 
         let publication = await Publication.findOne({ alias: this.site }).exec();
