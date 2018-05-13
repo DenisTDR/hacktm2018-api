@@ -43,7 +43,7 @@ export default class EthApiService {
                 articleAddress: articleAddress,
                 vote: value,
                 weight: 1.5,
-                userProfileAddress: userProfileAddress,
+                profileAddress: userProfileAddress,
                 voterAddress: userEthAddress,
                 password: userPassword
             },

@@ -161,9 +161,7 @@ class Express {
         const corsOptions = {
             origin: [
                 'http://localhost:4200',
-                'http://localhost:4000',
-                'https://opiria.io',
-                'https://panel.opiria.io',
+                'http://localhost:4000'
             ],
             credentials: true,
             optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
