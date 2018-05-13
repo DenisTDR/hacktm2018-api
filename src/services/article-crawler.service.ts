@@ -34,7 +34,11 @@ export default class ArticleCrawler {
         const title = $('title').first().text();
         const articleLead = $('.data-app-meta-article p').first().text();
         const articleBody = $('.data-app-meta-article p').filter(i => i > 0).text();
-        const thumbnail= $('.img-responsive img').attr('data-src-later');
+        const thumbnail= $('.entry .img-responsive img').attr('data-src-later');
+
+        if (typeof thumbnail === 'undefined') {
+          thumbnail = 'https://www.digi24.ro/static/theme-1616-repo/dist/assets/svg/digi24.ro-logo.svg'
+        }
 
         let publication = await Publication.findOne({ alias: this.site }).exec();
 
