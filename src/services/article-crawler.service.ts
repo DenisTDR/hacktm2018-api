@@ -55,7 +55,7 @@ export default class ArticleCrawler {
         const title = $('title').first().text();
         const articleLead = $('#articleContent strong').first().text();
         const articleBody = $('#articleContent').remove('strong').text();
-        const thumbnail = $('#articleContent img').attr('src');
+        const thumbnail = $('.lead_multimedia img').attr('src').replace('-46-', '-41-');
 
         let publication = await Publication.findOne({ alias: this.site }).exec();
 
